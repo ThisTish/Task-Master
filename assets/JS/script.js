@@ -73,7 +73,7 @@ function renderTaskList() {
 		}
 	}
 
-	// *found on jqueryui clone might not be right.
+	// *found on jqueryui
 	$(function() {
 		$(".draggable").draggable({
 			zIndex: 100,
