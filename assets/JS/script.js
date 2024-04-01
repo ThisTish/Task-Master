@@ -21,7 +21,7 @@ function generateTaskId() {
 
 // Todo: create a function to create a task card
 function createTaskCard(task) {
-	const taskCard = $('<div>').addClass('task-card').attr(filler)
+	const taskCard = $('<div>').addClass('card task-card draggable my-3').attr('data-task-id', task.id)
 	
 	const cardTitle = $('<div>').addClass('card-header h4').text(task.name)
 	const cardBody = $('<div>').addClass('body')
@@ -56,14 +56,38 @@ function renderTaskList() {
 
 	const todoList = $('#todo-cards');
 	todoList.empty();
-
 	const inProgressList = $('#in-progress-cards');
 	inProgressList.empty();
-
 	const doneList = $('#done-cards');
 	doneList.empty();
 
+	for (let task of tasks){
+		if(task.status === 'to-do'){
+			todoList.append(createTaskCard(task))
+		}
+		else if(task.status === 'in-progress'){
+			inProgressList.append(createTaskCard(task))
+		}
+		else if(task.status === 'done'){
+			doneList.append(createTaskCard(task))
+		}
+	}
 
+	// *found on jqueryui clone might not be right.
+	$(function() {
+		$(".draggable").draggable({
+			zIndex: 100,
+			opacity: .5,
+			helper: function(e){
+				const card = $(e.target).hasClass('ui-draggable')
+				?$(e.target)
+				: $(e.target).closest('ui-draggable')
+				return card.clone().css({
+					width: card.outerWidth()
+				})
+			}
+		})
+	} )
 }
 
 // Todo: create a function to handle adding a new task
