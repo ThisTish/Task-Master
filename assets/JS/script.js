@@ -2,6 +2,13 @@
 let taskList = JSON.parse(localStorage.getItem("tasks"));
 let nextId = JSON.parse(localStorage.getItem("nextId"));
 
+const addTaskBtnEl = document.querySelector('.addTaskBtn')
+const taskTitleEl = document.querySelector('.titleInput')
+const taskDescriptionEl = document.querySelector('.descriptionInput')
+const taskDueDateEl = document.querySelector('.dueDate')
+const saveTaskEl = document.querySelector('.saveBtn')
+const deleteBtnEl = document.querySelector('.deleteBtn')
+
 function readLocalTasks(tasks){
 	let tasks = localStorage.getItem('tasks',JSON.parse(tasks))
 	if(!tasks){
@@ -25,7 +32,7 @@ function createTaskCard(task) {
 	
 	const cardTitle = $('<div>').addClass('card-header h4').text(task.name)
 	const cardBody = $('<div>').addClass('body')
-	const cardDescription = $('<p>').addClass('card-text').text(task.taskDescription)
+	const cardDescription = $('<p>').addClass('card-text').text(task.description)
 	const cardDueDate = $('<p>').addClass('card-text').text(task.dueDate)
 	
 	const deleteBtn = $('<button>').addClass('btn btn-danger delete').text('Delete').attr('data-task-id', task.id)
@@ -34,33 +41,30 @@ function createTaskCard(task) {
 	if(task.dueDate && task.status !== 'done'){
 		const now = dayjs()
 		const soon = 3
-		const taskDueDate = dayjs(task.dueDate, 'DD/MM/YYYY')
+		const taskDueBy = dayjs(task.dueDate, 'DD/MM/YYYY')
 		
-		if(now.isSame(taskDueDate,'day') || now.isBefore(taskDueDate.subtract(soon),'day')){
+		if(now.isSame(taskDueBy,'day') || now.isBefore(taskDueBy.subtract(soon),'day')){
 			taskCard.addClass('bg-warning text-white')
 		}
-		else if(now.isAfter(taskDueDate)){
+		else if(now.isAfter(taskDueBy)){
 			taskCard.addClass('bg-danger text-white')
 			deleteBtn.addClass('border-warning')
 		}	
 	}
 	cardBody.append(cardDescription, cardDueDate, deleteBtn)
 	taskCard.append(cardTitle, cardBody)
-
 	return taskCard
 }
 
 // Todo: create a function to render the task list and make cards draggable
 function renderTaskList() {
 	const tasks = readLocalTasks()
-
 	const todoList = $('#todo-cards');
 	todoList.empty();
 	const inProgressList = $('#in-progress-cards');
 	inProgressList.empty();
 	const doneList = $('#done-cards');
 	doneList.empty();
-
 	for (let task of tasks){
 		if(task.status === 'to-do'){
 			todoList.append(createTaskCard(task))
@@ -72,7 +76,6 @@ function renderTaskList() {
 			doneList.append(createTaskCard(task))
 		}
 	}
-
 	// *found on jqueryui
 	$(function() {
 		$(".draggable").draggable({
@@ -92,6 +95,30 @@ function renderTaskList() {
 
 // Todo: create a function to handle adding a new task
 function handleAddTask(event){
+	event.preventDefault()
+
+	const taskID = generateTaskId()
+	const taskName = taskTitleEl.val()
+	const taskDescription = taskDescriptionEl.val()
+	const taskDueDate = taskDueDateEl.val()
+
+	
+	const newTask= {
+		id: taskID,
+		name: taskName,
+		description: taskDescription,
+		dueDate: taskDueDate,
+		status: 'to-do'
+	}
+		
+	const tasks = readLocalTasks()
+	tasks.push(newTask)
+	saveLocalTasks(tasks)
+	renderTaskList()
+
+	taskTitleEl.val('')
+	taskDescriptionEl.val('')
+	taskDueDateEl.val('')
 
 }
 
@@ -116,4 +143,3 @@ $(document).ready(function () {
     // $( "#datepicker" ).datepicker();
 } );
 
-});
