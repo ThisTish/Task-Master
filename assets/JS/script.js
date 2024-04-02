@@ -9,8 +9,9 @@ const taskDueDateEl = document.querySelector('.dueDate')
 const saveTaskEl = document.querySelector('.saveBtn')
 const deleteBtnEl = document.querySelector('.deleteBtn')
 
+// ?do i need tasks as a paramater
 function readLocalTasks(tasks){
-	let tasks = localStorage.getItem('tasks',JSON.parse(tasks))
+	let tasks = JSON.parse(localStorage.getItem('tasks'))
 	if(!tasks){
 		return tasks=[]
 	}
@@ -28,21 +29,28 @@ function generateTaskId() {
 
 // Todo: create a function to create a task card
 function createTaskCard(task) {
-	const taskCard = $('<div>').addClass('card task-card draggable my-3').attr('data-task-id', task.id)
+	const taskCard = $('<div>')
+	.addClass('card task-card draggable my-3')
+	.attr('data-task-id', task.id)
 	
 	const cardTitle = $('<div>').addClass('card-header h4').text(task.name)
-	const cardBody = $('<div>').addClass('body')
+	const cardBody = $('<div>').addClass('card-body')
 	const cardDescription = $('<p>').addClass('card-text').text(task.description)
 	const cardDueDate = $('<p>').addClass('card-text').text(task.dueDate)
 	
-	const deleteBtn = $('<button>').addClass('btn btn-danger delete').text('Delete').attr('data-task-id', task.id)
+	const deleteBtn = $('<button>')
+	.addClass('btn btn-danger delete')
+	.text('Delete')
+	// ? why is this here
+	.attr('data-task-id', task.id)
+	
 	deleteBtn.on('click', handleDeleteTask)
 	
 	if(task.dueDate && task.status !== 'done'){
 		const now = dayjs()
 		const soon = 3
 		const taskDueBy = dayjs(task.dueDate, 'DD/MM/YYYY')
-		
+		// ? isBefore might need to be isAfter, or change subtract to add
 		if(now.isSame(taskDueBy,'day') || now.isBefore(taskDueBy.subtract(soon),'day')){
 			taskCard.addClass('bg-warning text-white')
 		}
@@ -59,12 +67,14 @@ function createTaskCard(task) {
 // Todo: create a function to render the task list and make cards draggable
 function renderTaskList() {
 	const tasks = readLocalTasks()
+	
 	const todoList = $('#todo-cards');
 	todoList.empty();
 	const inProgressList = $('#in-progress-cards');
 	inProgressList.empty();
 	const doneList = $('#done-cards');
 	doneList.empty();
+	
 	for (let task of tasks){
 		if(task.status === 'to-do'){
 			todoList.append(createTaskCard(task))
@@ -77,6 +87,7 @@ function renderTaskList() {
 		}
 	}
 	// *found on jqueryui
+	// ?might not need the first function part
 	$(function() {
 		$(".draggable").draggable({
 			zIndex: 100,
@@ -124,18 +135,18 @@ function handleAddTask(event){
 
 // Todo: create a function to handle deleting a task
 function handleDeleteTask(event){
-
+// *starts at line 118, don't understand it yet.
 }
 
 // Todo: create a function to handle dropping a task into a new status lane
 function handleDrop(event, ui) {
-
+// * starts on line 170, also need to work on understanding
 }
 
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 $(document).ready(function () {
 
-
+// * starts on 203, need to add an eventlistener for submit button and add task button
 
 
 	// *dueDate datePicker:  
