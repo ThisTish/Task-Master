@@ -3,6 +3,8 @@ let taskList = JSON.parse(localStorage.getItem("tasks"));
 let nextId = JSON.parse(localStorage.getItem("nextId"));
 
 const addTaskBtnEl = document.querySelector('.addTaskBtn')
+// ? taskCardEl = document.querySelector('taskCard')
+// ? modalForm = document.querySelector('modalForm')
 const taskTitleEl = document.querySelector('.titleInput')
 const taskDescriptionEl = document.querySelector('.descriptionInput')
 const taskDueDateEl = document.querySelector('.dueDate')
@@ -135,16 +137,41 @@ function handleAddTask(event){
 
 // Todo: create a function to handle deleting a task
 function handleDeleteTask(event){
-// *starts at line 118, don't understand it yet.
+	const taskId = $(this).attr('data-task-id')
+	const tasks = readLocalTasks()
+tasks = tasks.filter((task) => task.id !== taskId)
+
+saveLocalTasks(tasks)
+
+renderTaskList()
 }
 
 // Todo: create a function to handle dropping a task into a new status lane
 function handleDrop(event, ui) {
 // * starts on line 170, also need to work on understanding
+	tasks = readLocalTasks()
+
+	const taskId = ui.draggable[0].dataset.taskId
+
+	const newStatus = event.target.id
+
+	for(let task of tasks){
+		if(task.id === taskId){
+		task.tatus = newStatus
+		}
+	}
+	saveLocalTasks()
+	renderTaskList()
 }
 
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 $(document).ready(function () {
+
+
+	modalForm.on('submit', handleAddTask)
+	taskCardEl.deleteBtn.on('click', handleDeleteTask)
+
+
 
 // * starts on 203, need to add an eventlistener for submit button and add task button
 
