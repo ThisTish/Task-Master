@@ -1,24 +1,26 @@
 // Retrieve tasks and nextId from localStorage
 let taskList = JSON.parse(localStorage.getItem("tasks"));
 let nextId = JSON.parse(localStorage.getItem("nextId"));
+const modalForm = $('#formModal')
+const taskCardEl = $('taskCard')
+const taskTitleEl = $('.titleInput')
+const taskDescriptionEl = $('.descriptionInput')
+const taskDueDateEl = $('.dueDate')
+const saveTaskEl = $('.saveBtn')
+const addTaskBtnEl = $('.addTaskBtn')
+const deleteBtnEl = $('.deleteBtn')
 
-const addTaskBtnEl = document.querySelector('.addTaskBtn')
-// ? taskCardEl = document.querySelector('taskCard')
-const modalForm = document.querySelector('modalForm')
-const taskTitleEl = document.querySelector('.titleInput')
-const taskDescriptionEl = document.querySelector('.descriptionInput')
-const taskDueDateEl = document.querySelector('.dueDate')
-const saveTaskEl = document.querySelector('.saveBtn')
-const deleteBtnEl = document.querySelector('.deleteBtn')
+console.log(JSON.parse(localStorage.tasks))
 
 // ?do i need tasks as a paramater
-function readLocalTasks(tasks){
+function readLocalTasks(){
 	let tasks = JSON.parse(localStorage.getItem('tasks'))
 	if(!tasks){
 		return tasks=[]
 	}
 	return tasks
 }
+console.log(JSON.parse(localStorage.tasks))
 
 function saveLocalTasks(tasks){
 	localStorage.setItem('tasks',JSON.stringify(tasks))
@@ -65,6 +67,7 @@ function createTaskCard(task) {
 	taskCard.append(cardTitle, cardBody)
 	return taskCard
 }
+console.log(JSON.parse(localStorage.tasks))
 
 // Todo: create a function to render the task list and make cards draggable
 function renderTaskList() {
@@ -89,22 +92,24 @@ function renderTaskList() {
 		}
 	}
 	// *found on jqueryui
-	// ?might not need the first function part
-	$(function() {
+	// ?might not need the first function part or add taskCardEl
+	
 		$(".draggable").draggable({
 			zIndex: 100,
 			opacity: .5,
 			helper: function(e){
 				const card = $(e.target).hasClass('ui-draggable')
-				?$(e.target)
+				? $(e.target)
 				: $(e.target).closest('ui-draggable')
 				return card.clone().css({
 					width: card.outerWidth()
 				})
 			}
 		})
-	} )
+	
 }
+
+console.log(JSON.parse(localStorage.tasks))
 
 // Todo: create a function to handle adding a new task
 function handleAddTask(event){
@@ -134,18 +139,18 @@ function handleAddTask(event){
 	taskDueDateEl.val('')
 
 }
-
+console.log(JSON.parse(localStorage.tasks))
 // Todo: create a function to handle deleting a task
-function handleDeleteTask(event){
+function handleDeleteTask(){
 	const taskId = $(this).attr('data-task-id')
-	const tasks = readLocalTasks()
+	let tasks = readLocalTasks()
 tasks = tasks.filter((task) => task.id !== taskId)
 
 saveLocalTasks(tasks)
 
 renderTaskList()
 }
-
+console.log(JSON.parse(localStorage.tasks))
 // Todo: create a function to handle dropping a task into a new status lane
 function handleDrop(event, ui) {
 // * starts on line 170, also need to work on understanding
@@ -157,7 +162,7 @@ function handleDrop(event, ui) {
 
 	for(let task of tasks){
 		if(task.id === taskId){
-		task.tatus = newStatus
+		task.status = newStatus
 		}
 	}
 	saveLocalTasks()
@@ -166,18 +171,21 @@ function handleDrop(event, ui) {
 
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 $(document).ready(function () {
+	renderTaskList()
 
+	$('.taskDueDate').datepicker({
+		changeMonth: true,
+		changeYear: true
+	})
 
+	$('.lane').droppable({
+		accept:'draggable',
+		drop: handleDrop
+	})
+
+// ?move these outside this function?
 	modalForm.on('submit', handleAddTask)
-	taskCardEl.deleteBtn.on('click', handleDeleteTask)
+	deleteBtnEl.on('click', handleDeleteTask)
 
-
-
-// * starts on 203, need to add an eventlistener for submit button and add task button
-
-
-	// *dueDate datePicker:  
-	// $( function() {
-    // $( "#datepicker" ).datepicker();
 } );
 
