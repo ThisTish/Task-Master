@@ -4,7 +4,7 @@ let nextId = JSON.parse(localStorage.getItem("nextId"));
 
 const addTaskBtnEl = document.querySelector('.addTaskBtn')
 // ? taskCardEl = document.querySelector('taskCard')
-// ? modalForm = document.querySelector('modalForm')
+const modalForm = document.querySelector('modalForm')
 const taskTitleEl = document.querySelector('.titleInput')
 const taskDescriptionEl = document.querySelector('.descriptionInput')
 const taskDueDateEl = document.querySelector('.dueDate')

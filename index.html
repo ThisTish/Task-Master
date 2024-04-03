@@ -21,36 +21,81 @@
     <p class="lead">A simple Kanban board for task management</p>
 </header>
 <div class="container">
-    <div class="text-center mb-5">
-	<button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#formModal">Add Task</button>
+  <div class="text-center mb-5">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#formModal">
+        Add Task
+    </button>
+      <!-- <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#formModal">Add Task</button> -->
     </div>
-    <!-- Todo: Create a modal with a form to add tasks -->
-    <!-- !Build form, place inside modal, or dialog/modal KP/bootstrap for refrences -->
-    <!-- *include required in inputs of form -->
-    <!-- ?add cancel button to close? would have to add another addlistener, and figure out how to close modal without submitting. -->
-    <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-    Launch demo modal
-  </button>
-  
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+  </div>
+<!-- Todo: Create a modal with a form to add tasks -->
+<!-- !Build form, place inside modal, or dialog/modal KP/bootstrap for refrences -->
+<!-- *include required in inputs of form -->
+<!-- ?add cancel button to close? would have to add another addlistener, and figure out how to close modal without submitting. -->
+<!-- Button trigger modal -->
+  <!-- <modal class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h5 class="modal-title">Add Task</h5>
         </div>
         <div class="modal-body">
-          ...
+          <form>
+            <div class="row">
+              <div class="col">
+                <label>Task Title</label>
+                <input type="text" class="form-control" placeholder="Task Title">
+              </div>
+              <div class="col">
+                <label>Task Due Date</label>
+                <input type="date" class="form-control" placeholder="Task Due Date">
+              </div>
+            </div>
+            <div class="row">
+              <label>Task Description</label>
+              <textarea type = "text" class="form-control" placeholder="Task Description"></textarea>
+            </div>
+          </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
-  </div>
+  </modal> -->
+  <!-- Modal -->
+  <modal class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="formModalLabel">Add task</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div>  
+            <label>Task Name</label>
+            <input type="text" class="titleInput" placeholder="Task name" required/>
+          </div>
+          <div>
+            <label>Task Due Date</label>
+            <input type="text" class="dueDate" placeholder="Task due date" required/>
+          </div> 
+          <br>
+          <div>
+            <label>Task Description</label>
+            <textarea type="text" class="descriptionInput" placeholder="Task description" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+          </form>
+        </div>
+        <!-- <div class="modal-footer"> -->
+          <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+        <!-- </div> -->
+      </div>
+    </div>
+  </modal>
 
 
 
