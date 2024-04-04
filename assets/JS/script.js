@@ -51,16 +51,19 @@ function createTaskCard(task) {
 	
 	if(task.dueDate && task.status !== 'done'){
 		const now = dayjs()
-		const soon = 3
+		const soon = 2
 		const taskDueBy = dayjs(task.dueDate, 'DD/MM/YYYY')
 		// ? isBefore might need to be isAfter, or change subtract to add
-		if(now.isSame(taskDueBy,'day') || now.isBefore(taskDueBy.subtract(soon),'day')){
-			taskCard.addClass('bg-warning text-white')
-		}
-		else if(now.isAfter(taskDueBy)){
+
+		const daysTilDue = taskDueBy.diff(now,'day')
+
+		if(now.isAfter(taskDueBy)){
 			taskCard.addClass('bg-danger text-white')
 			deleteBtn.addClass('border-warning')
-		}	
+		}
+		else if(daysTilDue <= soon || daysTilDue === 0){
+			taskCard.addClass('bg-warning text-white')
+		}
 	}
 	cardBody.append(cardDescription, cardDueDate, deleteBtn)
 	taskCard.append(cardTitle, cardBody)
@@ -92,8 +95,21 @@ function renderTaskList() {
 	}
 	// *found on jqueryui
 	// ?might not need the first function part or add taskCardEl
-
-
+	$(".draggable").draggable({
+		zIndex: 100,
+		opacity: .5,
+	
+		helper: function(e){
+			const card = $(e.target).hasClass('.ui-draggable')
+			? $(e.target)
+			: $(e.target).closest('.ui-draggable')
+			return card.clone().css({
+				width: card.outerWidth()
+			})
+		}
+	})
+	
+	
 	
 }
 
@@ -102,7 +118,7 @@ function renderTaskList() {
 // Todo: create a function to handle adding a new task
 function handleAddTask(event){
 	event.preventDefault()
-
+	
 	const taskID = generateTaskId()
 	const taskName = taskTitleEl.val()
 	const taskDescription = taskDescriptionEl.val()
@@ -154,9 +170,9 @@ function handleDrop(event, ui) {
 			task.status = newStatus
 		}
 	}
-	saveLocalTasks()
-	renderTaskList()
 	console.log(tasks)
+	saveLocalTasks(tasks)
+	renderTaskList()
 }
 
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
@@ -168,19 +184,6 @@ $(document).ready(function () {
 		changeYear: true
 	})
 	
-	$(".draggable").draggable({
-		zIndex: 100,
-		opacity: .5,
-
-		helper: function(e){
-			const card = $(e.target).hasClass('.ui-draggable')
-			? $(e.target)
-			: $(e.target).closest('.ui-draggable')
-			return card.clone().css({
-				width: card.outerWidth()
-			})
-		}
-	})
 
 	$('.lane').droppable({
 		accept:'.draggable',
