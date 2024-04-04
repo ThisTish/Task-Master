@@ -3,7 +3,6 @@ let taskList = JSON.parse(localStorage.getItem("tasks"));
 
 // *went with the random id generator function for id
 // let nextId = JSON.parse(localStorage.getItem("nextId"));
-// comment to update to deploy
 let formModal = $('#formModal')
 const taskCardEl = $('taskCard')
 const taskTitleEl = $('.titleInput')
