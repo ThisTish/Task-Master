@@ -1,6 +1,7 @@
 // Retrieve tasks and nextId from localStorage
 let taskList = JSON.parse(localStorage.getItem("tasks"));
-let nextId = JSON.parse(localStorage.getItem("nextId"));
+// *went with the random id generator function for id
+// let nextId = JSON.parse(localStorage.getItem("nextId"));
 let formModal = $('#formModal')
 const taskCardEl = $('taskCard')
 const taskTitleEl = $('.titleInput')
@@ -28,9 +29,10 @@ function saveLocalTasks(tasks){
 
 // Todo: create a function to generate a unique task id
 function generateTaskId() {
+	// localStorage.setItem('nextId',nextId +1)
+	// return nextId++
 	return self.crypto.randomUUID();
 }//*found on mdn
-
 // Todo: create a function to create a task card
 function createTaskCard(task) {
 	const taskCard = $('<div>')
@@ -40,7 +42,8 @@ function createTaskCard(task) {
 	const cardTitle = $('<div>').addClass('card-header h4').text(task.name)
 	const cardBody = $('<div>').addClass('card-body')
 	const cardDescription = $('<p>').addClass('card-text').text(task.description)
-	const cardDueDate = $('<p>').addClass('card-text').text(task.dueDate)
+	const formatDueDate = dayjs(task.dueDate).format('DD/MM/YYYY')
+	const cardDueDate = $('<p>').addClass('card-text').text(formatDueDate)
 	
 	const deleteBtn = $('<button>')
 	.addClass('btn btn-danger delete')
@@ -56,13 +59,13 @@ function createTaskCard(task) {
 		// ? isBefore might need to be isAfter, or change subtract to add
 
 		const daysTilDue = taskDueBy.diff(now,'day')
-
-		if(now.isAfter(taskDueBy)){
+		
+		if(daysTilDue <= soon && daysTilDue >= 0){
+			taskCard.addClass('bg-warning text-white')
+		}
+		else if(now.isAfter(taskDueBy)){
 			taskCard.addClass('bg-danger text-white')
 			deleteBtn.addClass('border-warning')
-		}
-		else if(daysTilDue <= soon || daysTilDue === 0){
-			taskCard.addClass('bg-warning text-white')
 		}
 	}
 	cardBody.append(cardDescription, cardDueDate, deleteBtn)
@@ -70,6 +73,7 @@ function createTaskCard(task) {
 	return taskCard
 }
 // console.log(JSON.parse(localStorage.tasks))
+
 
 // Todo: create a function to render the task list and make cards draggable
 function renderTaskList() {
