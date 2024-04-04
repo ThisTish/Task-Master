@@ -1,7 +1,9 @@
 // Retrieve tasks and nextId from localStorage
 let taskList = JSON.parse(localStorage.getItem("tasks"));
+
 // *went with the random id generator function for id
 // let nextId = JSON.parse(localStorage.getItem("nextId"));
+
 let formModal = $('#formModal')
 const taskCardEl = $('taskCard')
 const taskTitleEl = $('.titleInput')
@@ -11,9 +13,6 @@ const saveTaskEl = $('.saveBtn')
 const addTaskBtnEl = $('.addTaskBtn')
 const deleteBtnEl = $('.deleteBtn')
 
-// console.log(JSON.parse(localStorage.tasks))
-
-// ?do i need tasks as a paramater
 function readLocalTasks(){
 	let tasks = JSON.parse(localStorage.getItem('tasks'))
 	if(!tasks){
@@ -21,7 +20,6 @@ function readLocalTasks(){
 	}
 	return tasks
 }
-// console.log(JSON.parse(localStorage.tasks))
 
 function saveLocalTasks(tasks){
 	localStorage.setItem('tasks',JSON.stringify(tasks))
@@ -29,10 +27,9 @@ function saveLocalTasks(tasks){
 
 // Todo: create a function to generate a unique task id
 function generateTaskId() {
-	// localStorage.setItem('nextId',nextId +1)
-	// return nextId++
 	return self.crypto.randomUUID();
-}//*found on mdn
+}
+
 // Todo: create a function to create a task card
 function createTaskCard(task) {
 	const taskCard = $('<div>')
@@ -42,7 +39,7 @@ function createTaskCard(task) {
 	const cardTitle = $('<div>').addClass('card-header h4').text(task.name)
 	const cardBody = $('<div>').addClass('card-body')
 	const cardDescription = $('<p>').addClass('card-text').text(task.description)
-	const formatDueDate = dayjs(task.dueDate).format('DD/MM/YYYY')
+	const formatDueDate = dayjs(task.dueDate).format('MM/DD/YYYY')
 	const cardDueDate = $('<p>').addClass('card-text').text(formatDueDate)
 	
 	const deleteBtn = $('<button>')
@@ -56,7 +53,6 @@ function createTaskCard(task) {
 		const now = dayjs()
 		const soon = 2
 		const taskDueBy = dayjs(task.dueDate, 'DD/MM/YYYY')
-		// ? isBefore might need to be isAfter, or change subtract to add
 
 		const daysTilDue = taskDueBy.diff(now,'day')
 		
@@ -72,8 +68,6 @@ function createTaskCard(task) {
 	taskCard.append(cardTitle, cardBody)
 	return taskCard
 }
-// console.log(JSON.parse(localStorage.tasks))
-
 
 // Todo: create a function to render the task list and make cards draggable
 function renderTaskList() {
@@ -97,12 +91,10 @@ function renderTaskList() {
 			doneList.append(createTaskCard(task))
 		}
 	}
-	// *found on jqueryui
-	// ?might not need the first function part or add taskCardEl
+
 	$(".draggable").draggable({
 		zIndex: 100,
 		opacity: .5,
-	
 		helper: function(e){
 			const card = $(e.target).hasClass('.ui-draggable')
 			? $(e.target)
@@ -116,8 +108,6 @@ function renderTaskList() {
 	
 	
 }
-
-// console.log(JSON.parse(localStorage.tasks))
 
 // Todo: create a function to handle adding a new task
 function handleAddTask(event){
@@ -146,9 +136,10 @@ function handleAddTask(event){
 	taskDescriptionEl.val('')
 	taskDueDateEl.val('')
 	
+	console.log(tasks)
 	$('#modalForm').modal('hide')
 }
-// console.log(JSON.parse(localStorage.tasks))
+
 // Todo: create a function to handle deleting a task
 function handleDeleteTask(){
 	const taskId = $(this).attr('data-task-id')
@@ -159,10 +150,9 @@ function handleDeleteTask(){
 	
 renderTaskList()
 }
-// console.log(JSON.parse(localStorage.tasks))
+
 // Todo: create a function to handle dropping a task into a new status lane
 function handleDrop(event, ui) {
-	// * starts on line 170, also need to work on understanding
 	
 	const taskId = ui.draggable[0].dataset.taskId
 	
@@ -194,13 +184,7 @@ $(document).ready(function () {
 		drop: handleDrop
 	})
 	
-	// ?move these outside this function?
 	$('#formModal').on('submit', handleAddTask)
-	// $('#formModal').submit(function(e){
-	// 	// preventDefault()
-	// 	handleAddTask()
-	// 	$('#formModal').modal('toggle')
-	// })
 	deleteBtnEl.on('click', handleDeleteTask)
 	
 	
